@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日科技资讯 Top 10</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --card-bg: #ffffff;
+      --text: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --accent: #0071e3;
+      --accent-hover: #0077ed;
+      --border: #e5e5e5;
+      --badge-ai: #e8f5e9;
+      --badge-ai-text: #2e7d32;
+      --badge-product: #e3f2fd;
+      --badge-product-text: #1565c0;
+      --badge-funding: #fff3e0;
+      --badge-funding-text: #e65100;
+      --badge-policy: #f3e5f5;
+      --badge-policy-text: #7b1fa2;
+      --badge-hardware: #fce4ec;
+      --badge-hardware-text: #c62828;
+      --badge-internet: #e0f7fa;
+      --badge-internet-text: #00695c;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a2e;
+        --card-bg: #16213e;
+        --text: #e8e8e8;
+        --text-secondary: #a0a0a0;
+        --border: #2a2a4a;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 20px 16px 60px; }
+
+    header {
+      text-align: center;
+      padding: 40px 0 32px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    header .date {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 16px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .loading-state, .error-state, .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .loading-state .spinner {
+      width: 36px; height: 36px;
+      margin: 0 auto 16px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .article-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .article-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 12px rgba(0,113,227,0.12);
+    }
+
+    .rank {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 2px;
+    }
+
+    .rank-1 { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
+    .rank-2 { background: linear-gradient(135deg, #ffa502, #e67e22); }
+    .rank-3 { background: linear-gradient(135deg, #ffd32a, #f9ca24); color: #333; }
+
+    .card-content { flex: 1; min-width: 0; }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .card-title a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .card-title a:hover { color: var(--accent); }
+
+    .card-summary {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+    }
+
+    .badge {
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+
+    .badge-ai { background: var(--badge-ai); color: var(--badge-ai-text); }
+    .badge-产品 { background: var(--badge-product); color: var(--badge-product-text); }
+    .badge-投融资 { background: var(--badge-funding); color: var(--badge-funding-text); }
+    .badge-政策 { background: var(--badge-policy); color: var(--badge-policy-text); }
+    .badge-硬件 { background: var(--badge-hardware); color: var(--badge-hardware-text); }
+    .badge-互联网 { background: var(--badge-internet); color: var(--badge-internet-text); }
+
+    .source {
+      color: var(--text-secondary);
+    }
+
+    .read-more {
+      margin-left: auto;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .read-more:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.4rem; }
+      .article-card { padding: 16px; flex-direction: column; gap: 10px; }
+      .rank { width: 28px; height: 28px; font-size: 0.85rem; }
+      .card-title { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>科技前沿资讯</h1>
+      <div class="date" id="date-display">--</div>
+    </header>
+
+    <div id="content">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>正在加载今日资讯...</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>每日自动更新 · 数据由 Claude AI 整理 · Powered by GitHub Actions</p>
+    </footer>
+  </div>
+
+  <script>
+    async function loadNews() {
+      const content = document.getElementById('content');
+
+      try {
+        const resp = await fetch('data.json?v=' + Date.now());
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const data = await resp.json();
+
+        document.getElementById('date-display').textContent = data.date;
+
+        if (!data.articles || data.articles.length === 0) {
+          content.innerHTML = '<div class="empty-state"><p>暂无今日资讯</p></div>';
+          return;
+        }
+
+        const cards = data.articles.map((a) => {
+          const rankClass = a.rank <= 3 ? ' rank-' + a.rank : '';
+          const catClass = 'badge-' + (a.category || '互联网');
+          const badgeClass = a.category ? catClass : '';
+          return `
+            <article class="article-card">
+              <div class="rank${rankClass}">${a.rank}</div>
+              <div class="card-content">
+                <div class="card-title">
+                  <a href="${escapeHTML(a.url)}" target="_blank" rel="noopener">${escapeHTML(a.title)}</a>
+                </div>
+                <div class="card-summary">${escapeHTML(a.summary)}</div>
+                <div class="card-meta">
+                  <span class="badge ${badgeClass}">${escapeHTML(a.category || '科技')}</span>
+                  <span class="source">${escapeHTML(a.source)}</span>
+                  <a href="${escapeHTML(a.url)}" class="read-more" target="_blank" rel="noopener">阅读原文 →</a>
+                </div>
+              </div>
+            </article>`;
+        });
+
+        content.innerHTML = cards.join('\n');
+      } catch (err) {
+        console.error(err);
+        content.innerHTML = `<div class="error-state">
+          <p>加载失败</p>
+          <p style="font-size:0.85rem;margin-top:8px">${escapeHTML(err.message)}</p>
+        </div>`;
+      }
+    }
+
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    loadNews();
+  </script>
+</body>
+</html>

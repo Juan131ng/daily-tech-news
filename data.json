@@ -1,0 +1,97 @@
+{
+  "generated_at": "2026-05-09T00:00:00+08:00",
+  "date": "2026-05-09",
+  "count": 10,
+  "articles": [
+    {
+      "rank": 1,
+      "title": "OpenAI 发布 GPT-5 模型，推理能力大幅提升",
+      "summary": "OpenAI 今日正式发布 GPT-5 模型，在推理、数学和代码生成等基准测试中全面超越前代产品。新模型支持更长的上下文窗口，并在多模态理解方面有显著改进。",
+      "category": "AI",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com",
+      "published": "2026-05-09T08:00:00Z"
+    },
+    {
+      "rank": 2,
+      "title": "苹果宣布 M4 Ultra 芯片，面向专业工作站",
+      "summary": "苹果公司今日发布 M4 Ultra 芯片，采用全新的 2nm 工艺，拥有超过 2000 亿晶体管。该芯片将首先搭载于新一代 Mac Pro 和 Mac Studio 产品线。",
+      "category": "硬件",
+      "source": "The Verge",
+      "url": "https://www.theverge.com",
+      "published": "2026-05-09T07:30:00Z"
+    },
+    {
+      "rank": 3,
+      "title": "欧盟通过全球首部 AI 监管法案，2027年全面生效",
+      "summary": "欧盟议会以压倒性票数通过《人工智能法案》，对高风险 AI 系统实施严格的透明度、数据治理和人工监督要求。该法案将在 2027 年全面生效。",
+      "category": "政策",
+      "source": "Wired",
+      "url": "https://www.wired.com",
+      "published": "2026-05-09T06:00:00Z"
+    },
+    {
+      "rank": 4,
+      "title": "Google DeepMind 推出 AlphaFold 4，可预测蛋白质相互作用网络",
+      "summary": "DeepMind 发布 AlphaFold 4，首次能够预测蛋白质间的相互作用网络，为新药研发和疾病机理研究带来革命性工具。",
+      "category": "AI",
+      "source": "Ars Technica",
+      "url": "https://arstechnica.com",
+      "published": "2026-05-09T05:00:00Z"
+    },
+    {
+      "rank": 5,
+      "title": "字节跳动旗下 Lemur 获得 50 亿美元融资，估值达 300 亿",
+      "summary": "字节跳动的 AI 子公司 Lemur 完成新一轮 50 亿美元融资，投后估值达 300 亿美元。融资将用于海外市场扩张和基础模型研发。",
+      "category": "投融资",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com",
+      "published": "2026-05-09T04:00:00Z"
+    },
+    {
+      "rank": 6,
+      "title": "SpaceX 星舰第六次试飞成功，首次实现轨道级货物运输",
+      "summary": "SpaceX 星舰完成第六次试飞，首次实现轨道级货物运输任务，将 20 吨模拟载荷送入预定轨道，标志着商业太空运输进入新纪元。",
+      "category": "硬件",
+      "source": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "published": "2026-05-08T23:00:00Z"
+    },
+    {
+      "rank": 7,
+      "title": "Meta 开源 Llama 4 模型家族，性能对标 GPT-5",
+      "summary": "Meta 宣布开源 Llama 4 系列模型，包含 7B 到 405B 参数版本。基准测试显示其性能已接近 GPT-5，引发开源社区热议。",
+      "category": "AI",
+      "source": "The Verge",
+      "url": "https://www.theverge.com",
+      "published": "2026-05-08T22:00:00Z"
+    },
+    {
+      "rank": 8,
+      "title": "微信正式推出 AR 眼镜操作系统 WeOS AR",
+      "summary": "腾讯微信发布专为 AR 眼镜打造的操作系统 WeOS AR，已与多家硬件厂商达成合作，首批产品预计下半年上市。",
+      "category": "产品",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com",
+      "published": "2026-05-08T20:00:00Z"
+    },
+    {
+      "rank": 9,
+      "title": "GitHub Copilot X 全面开放，支持自然语言编程",
+      "summary": "GitHub 宣布 Copilot X 向所有开发者开放，新增自然语言编程功能，用户可通过中文、英文等多语言描述需求直接生成完整代码项目。",
+      "category": "产品",
+      "source": "Hacker News",
+      "url": "https://news.ycombinator.com",
+      "published": "2026-05-08T19:00:00Z"
+    },
+    {
+      "rank": 10,
+      "title": "台积电 2nm 工艺良率突破 90%，预计 Q3 量产",
+      "summary": "台积电宣布其 2nm 制程工艺良率已突破 90%，计划于 2026 年第三季度开始量产。首批客户包括苹果、英伟达和 AMD。",
+      "category": "硬件",
+      "source": "Ars Technica",
+      "url": "https://arstechnica.com",
+      "published": "2026-05-08T18:00:00Z"
+    }
+  ]
+}
