@@ -4,125 +4,216 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>每日科技资讯 Top 10</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f5f5f7;
+      --bg: #fafafa;
       --card-bg: #ffffff;
-      --text: #1d1d1f;
-      --text-secondary: #6e6e73;
-      --accent: #0071e3;
-      --accent-hover: #0077ed;
-      --border: #e5e5e5;
-      --badge-ai: #e8f5e9;
-      --badge-ai-text: #2e7d32;
-      --badge-product: #e3f2fd;
-      --badge-product-text: #1565c0;
-      --badge-funding: #fff3e0;
-      --badge-funding-text: #e65100;
-      --badge-policy: #f3e5f5;
-      --badge-policy-text: #7b1fa2;
-      --badge-hardware: #fce4ec;
-      --badge-hardware-text: #c62828;
-      --badge-internet: #e0f7fa;
-      --badge-internet-text: #00695c;
+      --text: #0f0f0f;
+      --text-secondary: #71717a;
+      --purple: #6d5dfc;
+      --purple-hover: #5a4bd9;
+      --purple-light: rgba(109, 93, 252, 0.08);
+      --purple-glow: rgba(109, 93, 252, 0.06);
+      --border: #e4e4e7;
+      --radius: 14px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+      --shadow-hover: 0 4px 16px rgba(109, 93, 252, 0.08), 0 2px 6px rgba(0,0,0,0.04);
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #1a1a2e;
-        --card-bg: #16213e;
-        --text: #e8e8e8;
-        --text-secondary: #a0a0a0;
-        --border: #2a2a4a;
+        --bg: #09090b;
+        --card-bg: #18181b;
+        --text: #fafafa;
+        --text-secondary: #a1a1aa;
+        --border: #27272a;
+        --shadow: 0 1px 3px rgba(0,0,0,0.2);
+        --shadow-hover: 0 4px 24px rgba(109, 93, 252, 0.12), 0 2px 8px rgba(0,0,0,0.3);
+        --purple-light: rgba(109, 93, 252, 0.12);
+        --purple-glow: rgba(109, 93, 252, 0.04);
       }
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .container { max-width: 800px; margin: 0 auto; padding: 20px 16px 60px; }
+    /* Noise overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.015;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Purple glow */
+    body::after {
+      content: "";
+      position: fixed;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 900px;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle, var(--purple-glow) 0%, transparent 70%);
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 20px 20px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Header ───────────────────── */
 
     header {
       text-align: center;
-      padding: 40px 0 32px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 32px;
+      padding: 56px 0 40px;
+    }
+
+    header .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 13px;
+      background: var(--purple-light);
+      margin-bottom: 20px;
+    }
+
+    header .icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--purple);
     }
 
     header h1 {
-      font-size: 1.8rem;
+      font-size: 1.65rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      color: var(--text);
     }
 
-    header .date {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 4px 16px;
-      background: var(--accent);
-      color: #fff;
+    header .subtitle {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    header .date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 5px 14px;
+      background: var(--purple-light);
+      color: var(--purple);
       border-radius: 20px;
-      font-size: 0.9rem;
+      font-size: 0.82rem;
       font-weight: 500;
     }
 
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .meta-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--purple);
+      display: inline-block;
+    }
+
+    /* ── Loading / Empty ──────────── */
+
     .loading-state, .error-state, .empty-state {
       text-align: center;
-      padding: 60px 20px;
+      padding: 80px 20px;
       color: var(--text-secondary);
     }
 
     .loading-state .spinner {
-      width: 36px; height: 36px;
-      margin: 0 auto 16px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
+      width: 32px; height: 32px;
+      margin: 0 auto 18px;
+      border: 2.5px solid var(--border);
+      border-top-color: var(--purple);
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.7s linear infinite;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Article Card ─────────────── */
+
     .article-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px 24px;
-      margin-bottom: 14px;
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      margin-bottom: 12px;
       display: flex;
-      gap: 16px;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      gap: 18px;
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s, box-shadow 0.25s, transform 0.15s;
     }
 
     .article-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 2px 12px rgba(0,113,227,0.12);
+      border-color: rgba(109, 93, 252, 0.25);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-1px);
     }
 
     .rank {
       flex-shrink: 0;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
+      width: 34px; height: 34px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 1rem;
-      margin-top: 2px;
+      font-size: 0.85rem;
+      font-family: "JetBrains Mono", "Inter", monospace;
+      margin-top: 1px;
+      background: var(--purple-light);
+      color: var(--purple);
     }
 
-    .rank-1 { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
-    .rank-2 { background: linear-gradient(135deg, #ffa502, #e67e22); }
-    .rank-3 { background: linear-gradient(135deg, #ffd32a, #f9ca24); color: #333; }
+    .rank-1 { background: var(--purple); color: #fff; }
+    .rank-2 { background: rgba(109, 93, 252, 0.85); color: #fff; }
+    .rank-3 { background: rgba(109, 93, 252, 0.6); color: #fff; }
 
     .card-content { flex: 1; min-width: 0; }
 
@@ -130,21 +221,23 @@
       font-size: 1.05rem;
       font-weight: 600;
       margin-bottom: 6px;
-      line-height: 1.4;
+      line-height: 1.45;
+      letter-spacing: -0.01em;
     }
 
     .card-title a {
       color: var(--text);
       text-decoration: none;
+      transition: color 0.15s;
     }
 
-    .card-title a:hover { color: var(--accent); }
+    .card-title a:hover { color: var(--purple); }
 
     .card-summary {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-secondary);
-      margin-bottom: 10px;
-      line-height: 1.5;
+      margin-bottom: 12px;
+      line-height: 1.55;
     }
 
     .card-meta {
@@ -152,22 +245,19 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
     }
 
     .badge {
-      padding: 2px 10px;
-      border-radius: 10px;
+      padding: 3px 10px;
+      border-radius: 8px;
       font-weight: 600;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.01em;
+      background: var(--purple-light);
+      color: var(--purple);
+      border: 1px solid rgba(109, 93, 252, 0.12);
     }
-
-    .badge-ai { background: var(--badge-ai); color: var(--badge-ai-text); }
-    .badge-产品 { background: var(--badge-product); color: var(--badge-product-text); }
-    .badge-投融资 { background: var(--badge-funding); color: var(--badge-funding-text); }
-    .badge-政策 { background: var(--badge-policy); color: var(--badge-policy-text); }
-    .badge-硬件 { background: var(--badge-hardware); color: var(--badge-hardware-text); }
-    .badge-互联网 { background: var(--badge-internet); color: var(--badge-internet-text); }
 
     .source {
       color: var(--text-secondary);
@@ -175,36 +265,60 @@
 
     .read-more {
       margin-left: auto;
-      color: var(--accent);
+      color: var(--purple);
       text-decoration: none;
       font-weight: 500;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       white-space: nowrap;
+      transition: opacity 0.15s;
     }
 
-    .read-more:hover { text-decoration: underline; }
+    .read-more:hover { opacity: 0.75; }
+
+    /* ── Footer ───────────────────── */
 
     footer {
       text-align: center;
-      padding: 32px 0;
+      padding: 40px 0 0;
       color: var(--text-secondary);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       border-top: 1px solid var(--border);
+      margin-top: 20px;
     }
 
+    footer .divider {
+      display: inline-block;
+      margin: 0 8px;
+      opacity: 0.3;
+    }
+
+    /* ── Mobile ───────────────────── */
+
     @media (max-width: 600px) {
-      header h1 { font-size: 1.4rem; }
-      .article-card { padding: 16px; flex-direction: column; gap: 10px; }
-      .rank { width: 28px; height: 28px; font-size: 0.85rem; }
+      header { padding: 36px 0 28px; }
+      header h1 { font-size: 1.35rem; }
+      .article-card { padding: 18px; flex-direction: column; gap: 12px; }
+      .rank { width: 28px; height: 28px; font-size: 0.8rem; border-radius: 8px; }
       .card-title { font-size: 0.95rem; }
+      .meta-row { flex-direction: column; gap: 6px; }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+        </svg>
+      </div>
       <h1>科技前沿资讯</h1>
-      <div class="date" id="date-display">--</div>
+      <p class="subtitle">每日精选全球十大科技要闻</p>
+      <div class="date-badge" id="date-display">--</div>
+      <div class="meta-row">
+        <span><span class="dot"></span> AI 筛选</span>
+        <span>GitHub Actions</span>
+      </div>
     </header>
 
     <div id="content">
@@ -215,7 +329,9 @@
     </div>
 
     <footer>
-      <p>每日自动更新 · 数据由 Claude AI 整理 · Powered by GitHub Actions</p>
+      <span>每日 UTC 0:00 自动更新</span>
+      <span class="divider">·</span>
+      <span>Powered by DeepSeek</span>
     </footer>
   </div>
 
@@ -237,8 +353,6 @@
 
         const cards = data.articles.map((a) => {
           const rankClass = a.rank <= 3 ? ' rank-' + a.rank : '';
-          const catClass = 'badge-' + (a.category || '互联网');
-          const badgeClass = a.category ? catClass : '';
           return `
             <article class="article-card">
               <div class="rank${rankClass}">${a.rank}</div>
@@ -248,7 +362,7 @@
                 </div>
                 <div class="card-summary">${escapeHTML(a.summary)}</div>
                 <div class="card-meta">
-                  <span class="badge ${badgeClass}">${escapeHTML(a.category || '科技')}</span>
+                  <span class="badge">${escapeHTML(a.category || '科技')}</span>
                   <span class="source">${escapeHTML(a.source)}</span>
                   <a href="${escapeHTML(a.url)}" class="read-more" target="_blank" rel="noopener">阅读原文 →</a>
                 </div>
@@ -258,7 +372,6 @@
 
         content.innerHTML = cards.join('\n');
       } catch (err) {
-        console.error(err);
         content.innerHTML = `<div class="error-state">
           <p>加载失败</p>
           <p style="font-size:0.85rem;margin-top:8px">${escapeHTML(err.message)}</p>
