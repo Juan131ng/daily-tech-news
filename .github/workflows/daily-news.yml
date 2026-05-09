@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate news
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: python scripts/generate_news.py
 
       - name: Setup Pages

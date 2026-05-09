@@ -1,6 +1,6 @@
 # 每日科技资讯 Top 10
 
-每天自动抓取全球科技新闻，由 Claude AI 筛选排序并生成中文摘要，通过 GitHub Pages 展示。
+每天自动抓取全球科技新闻，由 DeepSeek AI 筛选排序并生成中文摘要，通过 GitHub Pages 展示。
 
 ## 效果演示
 
@@ -13,7 +13,7 @@ RSS / Hacker News API
        ↓
   Python 去重 + 过滤
        ↓
-  Claude API 排序 + 摘要
+  DeepSeek API 排序 + 摘要
        ↓
   data.json
        ↓
@@ -35,7 +35,7 @@ cd daily-tech-news
 
 ```bash
 pip install -r requirements.txt
-ANTHROPIC_API_KEY=your-key python scripts/generate_news.py
+DEEPSEEK_API_KEY=your-key python scripts/generate_news.py
 ```
 
 ### 3. 部署到 GitHub Pages
@@ -43,8 +43,8 @@ ANTHROPIC_API_KEY=your-key python scripts/generate_news.py
 将项目推送到 GitHub，然后：
 
 - **设置 API Key**：Settings → Secrets and variables → Actions → New repository secret
-  - Name: `ANTHROPIC_API_KEY`
-  - Value: 你的 Anthropic API Key
+  - Name: `DEEPSEEK_API_KEY`
+  - Value: 你的 DeepSeek API Key
 
 - **启用 Pages**：Settings → Pages → Source → 选择 **GitHub Actions**
 

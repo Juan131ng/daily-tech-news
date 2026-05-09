@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fetch tech news from multiple sources, rank top 10 with Claude API, output data.json."""
+"""Fetch tech news from multiple sources, rank top 10 with DeepSeek API, output data.json."""
 
 import json
 import os
@@ -11,7 +11,7 @@ from difflib import SequenceMatcher
 
 import feedparser
 import httpx
-from anthropic import Anthropic
+from openai import OpenAI
 
 # ── Configuration ──────────────────────────────────────────────
 
@@ -196,9 +196,12 @@ def filter_recent(articles: list[dict], hours: int = 36) -> list[dict]:
 # ── LLM ranking ─────────────────────────────────────────────────
 
 
-def rank_with_claude(articles: list[dict]) -> list[dict]:
-    """Send articles to Claude for top-10 ranking and summarization."""
-    client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", ""))
+def rank_with_llm(articles: list[dict]) -> list[dict]:
+    """Send articles to DeepSeek for top-10 ranking and summarization."""
+    client = OpenAI(
+        api_key=os.environ.get("DEEPSEEK_API_KEY", ""),
+        base_url="https://api.deepseek.com",
+    )
 
     # Build compact article list for the prompt
     lines = []
@@ -212,17 +215,18 @@ def rank_with_claude(articles: list[dict]) -> list[dict]:
         )
     article_text = "\n".join(lines)
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
+    response = client.chat.completions.create(
+        model="deepseek-chat",
         max_tokens=4096,
-        system=SUMMARY_PROMPT,
+        temperature=0.3,
         messages=[
-            {"role": "user", "content": f"以下是今日科技资讯：\n\n{article_text}"}
+            {"role": "system", "content": SUMMARY_PROMPT},
+            {"role": "user", "content": f"以下是今日科技资讯：\n\n{article_text}"},
         ],
     )
 
     # Parse JSON from response
-    text = response.content[0].text.strip()
+    text = response.choices[0].message.content.strip()
     if text.startswith("```"):
         text = text.split("\n", 1)[1]
         if text.endswith("```"):
@@ -236,7 +240,7 @@ def rank_with_claude(articles: list[dict]) -> list[dict]:
     try:
         result = json.loads(text)
     except json.JSONDecodeError:
-        print("Failed to parse Claude response as JSON:", file=sys.stderr)
+        print("Failed to parse DeepSeek response as JSON:", file=sys.stderr)
         print(text, file=sys.stderr)
         # Fallback: return raw articles as top 10
         result = []
@@ -271,7 +275,7 @@ def main():
     unique = deduplicate(recent)
     print(f"  {len(unique)} unique articles")
 
-    # Limit to max for Claude
+    # Limit to max for LLM
     if len(unique) > MAX_ARTICLES_TO_SEND:
         unique = unique[:MAX_ARTICLES_TO_SEND]
 
@@ -279,8 +283,8 @@ def main():
         print("No articles found. Check your network or RSS sources.", file=sys.stderr)
         sys.exit(1)
 
-    print("Ranking with Claude...")
-    top10 = rank_with_claude(unique)
+    print("Ranking with DeepSeek...")
+    top10 = rank_with_llm(unique)
     print(f"  Got {len(top10)} ranked articles")
 
     # Build output
