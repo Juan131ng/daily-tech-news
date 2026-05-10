@@ -168,7 +168,7 @@ def deduplicate(articles: list[dict]) -> list[dict]:
 # ── Filter today ────────────────────────────────────────────────
 
 
-def filter_recent(articles: list[dict], hours: int = 36) -> list[dict]:
+def filter_recent(articles: list[dict], hours: int = 24) -> list[dict]:
     """Keep only articles published within the last N hours."""
     cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
     recent = []
@@ -188,13 +188,11 @@ def filter_recent(articles: list[dict], hours: int = 36) -> list[dict]:
                 except (ValueError, Exception):
                     pass
             else:
-                # If parsing fails, include it (don't filter out)
-                recent.append(art)
+                # Can't parse date — skip to avoid stale news
                 continue
             if dt.tzinfo is None:
                 dt = dt.replace(tzinfo=timezone.utc)
         except Exception:
-            recent.append(art)
             continue
 
         if dt >= cutoff:
@@ -230,7 +228,7 @@ def rank_with_llm(articles: list[dict]) -> list[dict]:
         temperature=0.3,
         messages=[
             {"role": "system", "content": SUMMARY_PROMPT},
-            {"role": "user", "content": f"以下是今日科技资讯。请务必跳过所有政策、法规、监管类新闻：\n\n{article_text}"},
+            {"role": "user", "content": f"今天是{datetime.now(timezone.utc).strftime('%Y年%m月%d日')}。以下是今日科技资讯，请只选择今日的新闻，排除所有政策、法规、监管类新闻：\n\n{article_text}"},
         ],
     )
 
