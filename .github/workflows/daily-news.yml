@@ -2,8 +2,8 @@ name: Daily Tech News
 
 on:
   schedule:
-    # UTC 0:00 = 北京时间 8:00
-    - cron: "0 0 * * *"
+    # UTC 23:57 = 北京时间 7:57（避开整点高峰）
+    - cron: "57 23 * * *"
   workflow_dispatch:
 
 permissions:
