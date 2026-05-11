@@ -3,8 +3,8 @@
 
 import json
 import os
+import re
 import sys
-import hashlib
 from datetime import datetime, timedelta, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from difflib import SequenceMatcher
@@ -16,11 +16,12 @@ from openai import OpenAI
 # ── Configuration ──────────────────────────────────────────────
 
 RSS_FEEDS = [
-    "https://feeds.feedburner.com/TechCrunch",
+    "https://techcrunch.com/feed/",
     "https://www.theverge.com/rss/index.xml",
     "https://feeds.arstechnica.com/arstechnica/index",
     "https://www.wired.com/feed/rss",
-    "https://hnrss.org/frontpage?count=30",
+    "https://www.engadget.com/rss.xml",
+    "https://9to5mac.com/feed/",
 ]
 
 HN_TOP_STORIES = "https://hacker-news.firebaseio.com/v0/topstories.json"
@@ -78,16 +79,18 @@ def fetch_rss(url: str) -> list[dict]:
     articles = []
     try:
         feed = feedparser.parse(url)
-    except Exception:
+    except Exception as exc:
+        print(f"  ⚠ Failed to fetch {url}: {exc}", file=sys.stderr)
         return articles
+
+    if feed.bozo:
+        print(f"  ⚠ Parse error for {url}: {feed.bozo_exception}", file=sys.stderr)
 
     for entry in feed.entries:
         title = entry.get("title", "").strip()
         link = entry.get("link", "")
         published = entry.get("published", "") or entry.get("updated", "")
         summary = entry.get("summary", "") or entry.get("description", "")
-        # strip HTML tags from summary
-        import re
         summary = re.sub(r"<[^>]*>", "", summary).strip()
         if title and link:
             articles.append(
@@ -109,7 +112,8 @@ def fetch_hackernews(client: httpx.Client) -> list[dict]:
         r = client.get(HN_TOP_STORIES, timeout=10)
         r.raise_for_status()
         ids = r.json()[:30]
-    except Exception:
+    except Exception as exc:
+        print(f"  ⚠ Failed to fetch HN top stories: {exc}", file=sys.stderr)
         return articles
 
     def _fetch_one(story_id: int):
@@ -273,6 +277,13 @@ def main():
     print("Fetching news from all sources...")
     raw = fetch_all()
     print(f"  Fetched {len(raw)} articles")
+    # Per-source breakdown
+    sources = {}
+    for art in raw:
+        src = art.get("source", "Unknown")
+        sources[src] = sources.get(src, 0) + 1
+    for src, count in sorted(sources.items(), key=lambda x: -x[1]):
+        print(f"    {src}: {count}")
 
     print("Filtering recent articles...")
     recent = filter_recent(raw)
@@ -282,13 +293,23 @@ def main():
     unique = deduplicate(recent)
     print(f"  {len(unique)} unique articles")
 
-    # Limit to max for LLM
-    if len(unique) > MAX_ARTICLES_TO_SEND:
-        unique = unique[:MAX_ARTICLES_TO_SEND]
+    # Fallback: widen time window if no recent articles found
+    if not unique:
+        for fallback_hours in (48, 72, 96):
+            print(f"  No articles in current window, trying {fallback_hours}h...")
+            recent = filter_recent(raw, hours=fallback_hours)
+            unique = deduplicate(recent)
+            print(f"    {len(unique)} unique articles")
+            if unique:
+                break
 
     if not unique:
         print("No articles found. Check your network or RSS sources.", file=sys.stderr)
         sys.exit(1)
+
+    # Limit to max for LLM
+    if len(unique) > MAX_ARTICLES_TO_SEND:
+        unique = unique[:MAX_ARTICLES_TO_SEND]
 
     print("Ranking with DeepSeek...")
     top10 = rank_with_llm(unique)
