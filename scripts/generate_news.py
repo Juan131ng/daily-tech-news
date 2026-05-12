@@ -16,20 +16,27 @@ from openai import OpenAI
 # ── Configuration ──────────────────────────────────────────────
 
 RSS_FEEDS = [
+    # 国际科技媒体
     "https://techcrunch.com/feed/",
     "https://www.theverge.com/rss/index.xml",
     "https://feeds.arstechnica.com/arstechnica/index",
     "https://www.wired.com/feed/rss",
     "https://www.engadget.com/rss.xml",
-    "https://9to5mac.com/feed/",
+    "https://www.technologyreview.com/feed/",
+    "https://www.theregister.com/headlines.atom",
+    "https://feeds.bbci.co.uk/news/technology/rss.xml",
+    # 国内科技媒体
+    "https://36kr.com/feed",
+    "https://www.ithome.com/rss/",
+    "https://www.solidot.org/index.rss",
 ]
 
 HN_TOP_STORIES = "https://hacker-news.firebaseio.com/v0/topstories.json"
 HN_ITEM = "https://hacker-news.firebaseio.com/v0/item/{}.json"
 
-MAX_ARTICLES_TO_SEND = 60  # upper bound for Claude input
+MAX_ARTICLES_TO_SEND = 80  # upper bound for LLM input
 OUTPUT_FILE = "data.json"
-MAX_WORKERS = 5
+MAX_WORKERS = 8
 SIMILARITY_THRESHOLD = 0.8
 
 SUMMARY_PROMPT = """你是一名资深科技编辑。以下是从各大科技媒体抓取到的今日科技资讯列表。
